@@ -426,6 +426,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
                     sql = querySql.concat(" and 1=0");
                 }
             }
+            sql = String.format("SELECT t.* FROM ( %s ) t WHERE 0 = 1", sql);
             //获取所有字段
             stmt = connection.createStatement();
             rs = stmt.executeQuery(sql);
@@ -433,7 +434,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
 
             int columnCount = metaData.getColumnCount();
             for (int i = 1; i <= columnCount; i++) {
-                res.add(metaData.getColumnName(i));
+                res.add(metaData.getColumnName(i).replace("t.",""));
             }
         } finally {
             JdbcUtils.close(rs);
